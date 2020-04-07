@@ -1,6 +1,6 @@
 import base64 from 'react-native-base64';
 
-const url = 'http://API-BLUESOFT/rest/api';
+const url = 'http://qreative.eastus.cloudapp.azure.com/rest/api';
 
 export function getStockByProduct(company, password, product){      
   return fetch(url + '/stock/' + product,{

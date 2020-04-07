@@ -4,14 +4,26 @@ import  { View, Text, TouchableHighlight,
 import { getConfig } from './Data';
 import { getStockByProduct } from './Api';
 import { debug } from 'react-native-reanimated';
+import MenuButton from './components/MenuButton';
 
 const styles = StyleSheet.create({
+    title: {
+        marginTop: 40,
+        marginLeft: 60,
+        marginBottom: 20,
+        height: 40,
+        fontSize: 20
+    },
+    subtitle: {
+        fontSize: 18,
+        padding: 10
+    },
     fieldContainer:{
         marginTop: 20,
         marginBottom: 20,
         backgroundColor: '#fff'
     },
-    text:{
+    text: {
         height: 40,
         margin: 0,
         marginRight: 7,
@@ -58,7 +70,10 @@ export default class Home extends Component{
                 this.setState({password: conf.password});
                 
                 if(conf.company == null){
-                    this.props.navigation.navigate('config');
+                    this.props.navigation.jumpTo('config');
+                }
+                else{
+                    this.forceUpdate();
                 }
             });
         }); 
@@ -74,14 +89,15 @@ export default class Home extends Component{
             this.state.password,
             this.state.product,
         ).then(result => {            
-            this.props.navigation.navigate('result', result)});
+            this.props.navigation.jumpTo('result', result)});
     }
 
     render(){
-        return(
+        return(            
             <View style={{flex: 1}}>
-                <Text>Bienvenido!</Text>
-                <Text>Consultá el stock de un producto en todas las sucursales!</Text>
+                <MenuButton navigation={this.props.navigation} />
+                <Text style={styles.title}>blueSoft STOCK</Text>
+                <Text style={styles.subtitle}>Consultá el stock de un producto en todas las sucursales:</Text>
                 <View style={styles.fieldContainer}>                                         
                     <TextInput 
                         style={styles.text}

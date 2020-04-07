@@ -2,8 +2,20 @@ import React, { Component } from 'react';
 import  { View, Text, TouchableHighlight,
     TextInput, StyleSheet } from 'react-native';
 import { getConfig, saveConfig } from './Data';
+import MenuButton from './components/MenuButton';
 
 const styles = StyleSheet.create({
+    title: {
+        marginTop: 40,
+        marginLeft: 60,
+        marginBottom: 20,
+        height: 40,
+        fontSize: 20
+    },
+    subtitle: {
+        fontSize: 18,
+        padding: 10
+    },
     fieldContainer:{
         marginTop: 20,
         marginBottom: 20,
@@ -44,16 +56,15 @@ export default class Config extends Component{
             user: '',
             password: ''
         };
-    }
-    
+    }    
 
     componentDidMount(){                
         this.props.navigation.addListener('focus', () =>{                                
             getConfig().then(conf => {
-                debugger;
                 this.setState({company: conf.company});
                 this.setState({user: conf.user});
                 this.setState({password: conf.password});
+                this.forceUpdate();
             });
         }); 
     }
@@ -71,16 +82,16 @@ export default class Config extends Component{
     }
 
     handleConfigPress = () =>{
-        //console.log(this.state);
-        //saveConfig(this.state)
-          //  .then(() => this.props.navigation.navigate('home'));
         saveConfig(this.state);
-        this.props.navigation.navigate('home');
+        this.props.navigation.jumpTo('home');
     }
 
     render(){
         return (
             <View style={{flex: 1}}>
+                <MenuButton navigation={this.props.navigation} />
+                <Text style={styles.title}>blueSoft Configuración</Text>
+                <Text style={styles.subtitle}>Indicá los siguientes valores para poder conectarte con tus datos:</Text>
                 <View style={styles.fieldContainer}> 
                     <TextInput 
                         style={styles.text}
@@ -88,13 +99,6 @@ export default class Config extends Component{
                         spellCheck={false}
                         value={this.state.company} 
                         onChangeText={this.handleChangeCompany}
-                    />
-                    <TextInput 
-                        style={[styles.text, styles.borderTop]}    
-                        placeholder="Usuario"
-                        spellCheck={false}
-                        value={this.state.user} 
-                        onChangeText={this.handleChangeUser}
                     />                    
                     <TextInput 
                         style={[styles.text, styles.borderTop]}    
