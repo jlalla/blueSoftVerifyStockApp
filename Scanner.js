@@ -33,14 +33,14 @@ export default function Scanner({ navigation }) {
   if (hasPermission === null) {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Requesting for camera permission</Text>
+        <Text>Abriendo cámara...</Text>
       </View>
     );
   }
   if (hasPermission === false) {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Sin acceso a la cámara</Text>
+        <Text>Sin acceso a la cámara.</Text>
       </View>
     );
   }

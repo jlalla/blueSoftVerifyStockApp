@@ -35,13 +35,14 @@ export default class SearchResult extends Component{
             var array = []
             for(var i in this.props.route.params){
                 array.push(this.props.route.params[i]);
-            }
-
-            this.setState({result: array});
+            }            
+            this.setState({result: array.map(
+                arrayItem => ({...arrayItem, id: uuid() }))});
         });
     }
 
     render(){                                        
+        debugger;
         if(this.state.result !== null && this.state.result.length > 0)
             return([
                 <View>
@@ -54,7 +55,7 @@ export default class SearchResult extends Component{
                     style={styles.list}
                     data={this.state.result}
                     renderItem={({item}) => <ResultItem item={item} />}
-                    keyExtractor = {item => uuid()}
+                    keyExtractor = {item => item.id}
                 />]
             );
         else
