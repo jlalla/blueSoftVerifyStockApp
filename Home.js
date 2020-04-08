@@ -85,11 +85,11 @@ export default class Home extends Component{
             this.state.company,
             this.state.password,
             this.state.product,
-        ).then(result => {            
+        ).then(result => {               
             this.props.navigation.jumpTo('result', result)});
     }
 
-    handleCameraPress = () => {
+    handleCameraPress = () => {        
         this.props.navigation.jumpTo('scanner');
     }
 

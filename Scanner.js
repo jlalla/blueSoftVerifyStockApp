@@ -24,7 +24,7 @@ export default function Scanner({ navigation }) {
         conf.company,
         conf.password,
         data
-      ).then(result => {            
+      ).then(result => {          
         navigation.jumpTo('result', result)
       });
     });    

@@ -30,19 +30,20 @@ export default class SearchResult extends Component{
     }
 
     componentDidMount(){
-        this.props.navigation.addListener('focus', () =>{                                
-
+        this.props.navigation.addListener('focus', () =>{                                            
             var array = []
             for(var i in this.props.route.params){
                 array.push(this.props.route.params[i]);
             }            
             this.setState({result: array.map(
                 arrayItem => ({...arrayItem, id: uuid() }))});
+            
+            /* eliminamos los parámetros */
+            this.props.route.params = null;
         });
     }
 
-    render(){                                        
-        debugger;
+    render(){                                                
         if(this.state.result !== null && this.state.result.length > 0)
             return([
                 <View>

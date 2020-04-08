@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "blueSoft.verifyStockApp",
+    "name": "blueSoft Stock",
     "slug": "verifyStockApp",
     "platforms": [
       "ios",
@@ -21,8 +21,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
+    "ios": {      
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.qreative.blueSoftVerifyStock",
+      "versionCode": 1
     }
   }
 }
