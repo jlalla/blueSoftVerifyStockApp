@@ -61,8 +61,7 @@ export default class Config extends Component{
     componentDidMount(){                
         this.props.navigation.addListener('focus', () =>{                                
             getConfig().then(conf => {
-                this.setState({company: conf.company});
-                this.setState({user: conf.user});
+                this.setState({company: conf.company});                
                 this.setState({password: conf.password});
                 this.forceUpdate();
             });
@@ -71,10 +70,6 @@ export default class Config extends Component{
 
     handleChangeCompany = (value) =>{
         this.setState({ company: value});
-    }
-
-    handleChangeUser = (value) =>{
-        this.setState({ user: value});
     }
 
     handleChangePassword = (value) =>{

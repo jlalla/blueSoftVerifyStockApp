@@ -3,7 +3,6 @@ import  { View, Text, TouchableHighlight,
     TextInput, StyleSheet } from 'react-native';
 import { getConfig } from './Data';
 import { getStockByProduct } from './Api';
-import { debug } from 'react-native-reanimated';
 import MenuButton from './components/MenuButton';
 
 const styles = StyleSheet.create({
@@ -56,7 +55,6 @@ export default class Home extends Component{
         super(props);
         this.state = {
             company: null,
-            user: '',
             password: '',
             product: ''
         };
@@ -65,8 +63,7 @@ export default class Home extends Component{
     componentDidMount(){
         this.props.navigation.addListener('focus', () =>{                                
             getConfig().then(conf => {                
-                this.setState({company: conf.company});
-                this.setState({user: conf.user});
+                this.setState({company: conf.company});                
                 this.setState({password: conf.password});
                 
                 if(conf.company == null){
@@ -92,6 +89,10 @@ export default class Home extends Component{
             this.props.navigation.jumpTo('result', result)});
     }
 
+    handleCameraPress = () => {
+        this.props.navigation.jumpTo('scanner');
+    }
+
     render(){
         return(            
             <View style={{flex: 1}}>
@@ -111,6 +112,11 @@ export default class Home extends Component{
                     onPress={this.handleSearchPress}
                     style={styles.button}>
                     <Text style={styles.buttonText}>BUSCAR</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    onPress={this.handleCameraPress}
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>USAR CÁMARA</Text>
                 </TouchableHighlight>
             </View>
         );

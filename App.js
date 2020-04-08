@@ -7,6 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Config from './Config';
 import Home from './Home';
 import SearchResult from './SearchResult';
+import Scanner from './Scanner';
 
 //const Stack = createStackNavigator();
 const WIDTH = Dimensions.get('window').width;
@@ -21,8 +22,9 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="home" component={Home} options={{ drawerLabel: 'Inicio' }}/>
-        <Drawer.Screen name="config" component={Config} options={{ drawerLabel: 'Configuración' }}/>
-        <Drawer.Screen name="result" component={SearchResult} options={{ drawerLabel: '' }}/>
+        <Drawer.Screen name="config" component={Config} options={{ drawerLabel: 'Configuración' }}/> 
+        <Drawer.Screen name="scanner" component={Scanner} options={{ drawerLabel: 'Escanear...' }}/>
+        <Drawer.Screen name="result" component={SearchResult} options={{ drawerLabel: '' }}/>        
       </Drawer.Navigator>
   </NavigationContainer>
   );
