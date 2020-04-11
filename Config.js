@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import  { View, Text, TouchableHighlight,
-    TextInput, StyleSheet } from 'react-native';
+import  { View, Text, TextInput, Switch, 
+    TouchableHighlight, StyleSheet } from 'react-native';
 import { getConfig, saveConfig } from './Data';
 import MenuButton from './components/MenuButton';
 
@@ -27,6 +27,14 @@ const styles = StyleSheet.create({
         marginRight: 7,
         paddingLeft: 10
     },
+    switchText:{
+        margin: 0,        
+        paddingTop: 10,
+        paddingLeft: 10
+    },
+    switch:{
+        marginTop: -10
+    },
     button: {
         height: 50,
         backgroundColor: '#48BBEC',
@@ -52,9 +60,9 @@ export default class Config extends Component{
     constructor(props){
         super(props);
         this.state = {
-            company: null,
-            user: '',
-            password: ''
+            company: null,            
+            password: '',
+            variants: false
         };
     }    
 
@@ -63,6 +71,7 @@ export default class Config extends Component{
             getConfig().then(conf => {
                 this.setState({company: conf.company});                
                 this.setState({password: conf.password});
+                this.setState({variants: conf.variants});
                 this.forceUpdate();
             });
         }); 
@@ -72,8 +81,12 @@ export default class Config extends Component{
         this.setState({ company: value});
     }
 
-    handleChangePassword = (value) =>{
-        this.setState({ password: value});
+    handleChangePassword = (value) => {
+        this.setState({ password: value });
+    }
+
+    handleChangeVariants = (value) => {        
+        this.setState({ variants: value });
     }
 
     handleConfigPress = () =>{
@@ -102,8 +115,16 @@ export default class Config extends Component{
                         value={this.state.password} 
                         onChangeText={this.handleChangePassword}
                         secureTextEntry={true}
-                    />                    
-                </View>
+                    /> 
+                    <Text style={styles.switchText}>{this.state.variants?'Usar talle-color':'No usar talle-color'}</Text>
+                    <Switch
+                        style={styles.switch}
+                        trackColor={{ false: "#767577", true: "#81b0ff" }}
+                        thumbColor={variants ? "#f5dd4b" : "#f4f3f4"}                        
+                        onValueChange={this.handleChangeVariants}
+                        value={this.state.variants}
+                    />                   
+                </View>                
                 <TouchableHighlight
                     onPress={this.handleConfigPress}
                     style={styles.button}>

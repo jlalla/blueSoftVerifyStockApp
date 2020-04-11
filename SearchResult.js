@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import  { View, Text, FlatList, StyleSheet } from 'react-native';
 import uuid from 'uuid';
-import ResultItem from './ResultItem';
 import MenuButton from './components/MenuButton';
+import { getConfig } from './Data';
+import ResultItem from './ResultItem';
+import ResultItemVariants from './ResultItemVariants';
 
 const styles = StyleSheet.create({
     list: {
@@ -15,10 +17,10 @@ const styles = StyleSheet.create({
         marginLeft: 60,
         marginBottom: 20,
         height: 40,
-        fontSize: 20
+        fontSize: 22
     },
     subtitle: {
-        fontSize: 18,
+        fontSize: 20,
         padding: 10
     }
 });
@@ -26,21 +28,35 @@ const styles = StyleSheet.create({
 export default class SearchResult extends Component{
 
     state = {
-        result: []
+        result: [],
+        variants : false
     }
 
     componentDidMount(){
         this.props.navigation.addListener('focus', () =>{                                            
-            var array = []
-            for(var i in this.props.route.params){
-                array.push(this.props.route.params[i]);
-            }            
-            this.setState({result: array.map(
-                arrayItem => ({...arrayItem, id: uuid() }))});
+            getConfig().then(conf => {                
+                this.setState({ variants: conf.variants});
+
+                var array = [];
+                for(var i in this.props.route.params){
+                    array.push(this.props.route.params[i]);
+                }            
+                this.setState({result: array.map(
+                    arrayItem => ({...arrayItem, id: uuid() }))});
+                
+                /* eliminamos los parámetros */
+                this.props.route.params = null;
+            });
             
-            /* eliminamos los parámetros */
-            this.props.route.params = null;
         });
+    }
+
+    handleRenderItem = (item) => {                
+        if(this.state.variants){
+            return <ResultItemVariants item={item}/>
+        }else{
+            return <ResultItem item={item}/>
+        }
     }
 
     render(){                                                
@@ -55,7 +71,7 @@ export default class SearchResult extends Component{
                     key="flatList"
                     style={styles.list}
                     data={this.state.result}
-                    renderItem={({item}) => <ResultItem item={item} />}
+                    renderItem={({item}) => this.handleRenderItem(item)}
                     keyExtractor = {item => item.id}
                 />]
             );

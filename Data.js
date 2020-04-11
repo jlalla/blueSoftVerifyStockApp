@@ -11,17 +11,7 @@ export async function getConfig()  {
     } catch (error) {
         // Error retrieving data
         console.log(error);
-    }
-    try {
-        user = await AsyncStorage.getItem('user');
-        if (user !== null) {
-            // Our data is fetched successfully
-            console.log(user);            
-        }
-    } catch (error) {
-        // Error retrieving data
-        console.log(error);
-    }
+    }  
     try {
         password = await AsyncStorage.getItem('password');
         if (password !== null) {
@@ -32,10 +22,21 @@ export async function getConfig()  {
         // Error retrieving data
         console.log(error);
     }
-    return { company, user, password };
+    try {
+        variants = JSON.parse(await AsyncStorage.getItem('variants'));
+        if (variants !== null) {
+            // Our data is fetched successfully            
+            console.log(variants);
+        }
+    } catch (error) {
+        // Error retrieving data
+        console.log(error);
+    }
+
+    return { company, password, variants };
 }
 
-export async function saveConfig({company, user, password}){
+export async function saveConfig({company, password, variants}){    
     try {
         await AsyncStorage.setItem('company', company);
     } catch (error) {
@@ -43,13 +44,13 @@ export async function saveConfig({company, user, password}){
         console.log(error);
     } 
     try {
-        await AsyncStorage.setItem('user', user);
+        await AsyncStorage.setItem('password', password);
     } catch (error) {
         // Error saving data
         console.log(error);
-    } 
+    }
     try {
-        await AsyncStorage.setItem('password', password);
+        await AsyncStorage.setItem('variants', JSON.stringify(variants));
     } catch (error) {
         // Error saving data
         console.log(error);

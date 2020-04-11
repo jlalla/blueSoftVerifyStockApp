@@ -2,8 +2,95 @@ import React, { Component } from 'react';
 import  { View, Text, TouchableHighlight,
     TextInput, StyleSheet } from 'react-native';
 import { getConfig } from './Data';
-import { getStockByProduct } from './Api';
+import { getStockByProduct, getStockByProductWithVariants } from './Api';
 import MenuButton from './components/MenuButton';
+
+export default class Home extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            company: null,
+            password: '',
+            variants: false,
+            product: ''            
+        };
+    }
+
+    componentDidMount(){
+        this.props.navigation.addListener('focus', () =>{                                
+            getConfig().then(conf => {                
+                this.setState({company: conf.company});                
+                this.setState({password: conf.password});
+                this.setState({variants: conf.variants});                                
+
+                if(conf.company == null){
+                    this.props.navigation.jumpTo('config');
+                }
+                else{
+                    this.forceUpdate();
+                }
+            });
+        }); 
+    }
+
+    handleChangeProduct = (value) => {
+        this.setState({ product : value});
+    }
+
+    handleSearchPress = () => {
+        
+        if(this.state.variants){            
+            getStockByProductWithVariants(
+                this.state.company,
+                this.state.password,
+                this.state.product,
+            ).then(result => {                     
+                this.props.navigation.jumpTo('result', result)});
+        }
+        else{
+            getStockByProduct(
+                this.state.company,
+                this.state.password,
+                this.state.product,
+            ).then(result => {                     
+                this.props.navigation.jumpTo('result', result)});
+        }        
+    }
+
+    handleCameraPress = () => {        
+        this.props.navigation.jumpTo('scanner');
+    }
+
+    render(){
+        return(            
+            <View style={{flex: 1}}>
+                <MenuButton navigation={this.props.navigation} />
+                <Text style={styles.title}>blueSoft STOCK</Text>
+                <Text style={styles.subtitle}>Consultá el stock de un producto en todas las sucursales:</Text>
+                <View style={styles.fieldContainer}>                                         
+                    <TextInput 
+                        style={styles.text}
+                        placeholder="Producto"
+                        spellCheck={false}
+                        value={this.state.product} 
+                        onChangeText={this.handleChangeProduct}
+                    />
+                </View>
+                <TouchableHighlight
+                    onPress={this.handleSearchPress}
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>BUSCAR</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    onPress={this.handleCameraPress}
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>USAR CÁMARA</Text>
+                </TouchableHighlight>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     title: {
@@ -47,78 +134,3 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.5
     }
 });
-
-
-export default class Home extends Component{
-
-    constructor(props){
-        super(props);
-        this.state = {
-            company: null,
-            password: '',
-            product: ''
-        };
-    }
-
-    componentDidMount(){
-        this.props.navigation.addListener('focus', () =>{                                
-            getConfig().then(conf => {                
-                this.setState({company: conf.company});                
-                this.setState({password: conf.password});
-                
-                if(conf.company == null){
-                    this.props.navigation.jumpTo('config');
-                }
-                else{
-                    this.forceUpdate();
-                }
-            });
-        }); 
-    }
-
-    handleChangeProduct = (value) => {
-        this.setState({ product : value});
-    }
-
-    handleSearchPress = () => {
-        getStockByProduct(
-            this.state.company,
-            this.state.password,
-            this.state.product,
-        ).then(result => {               
-            this.props.navigation.jumpTo('result', result)});
-    }
-
-    handleCameraPress = () => {        
-        this.props.navigation.jumpTo('scanner');
-    }
-
-    render(){
-        return(            
-            <View style={{flex: 1}}>
-                <MenuButton navigation={this.props.navigation} />
-                <Text style={styles.title}>blueSoft STOCK</Text>
-                <Text style={styles.subtitle}>Consultá el stock de un producto en todas las sucursales:</Text>
-                <View style={styles.fieldContainer}>                                         
-                    <TextInput 
-                        style={styles.text}
-                        placeholder="Producto"
-                        spellCheck={false}
-                        value={this.state.product} 
-                        onChangeText={this.handleChangeProduct}
-                    />
-                </View>
-                <TouchableHighlight
-                    onPress={this.handleSearchPress}
-                    style={styles.button}>
-                    <Text style={styles.buttonText}>BUSCAR</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={this.handleCameraPress}
-                    style={styles.button}>
-                    <Text style={styles.buttonText}>USAR CÁMARA</Text>
-                </TouchableHighlight>
-            </View>
-        );
-    }
-}
