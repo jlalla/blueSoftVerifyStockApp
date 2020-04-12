@@ -50,25 +50,29 @@ export default class SearchResult extends Component{
 
     render(){                                                
         if(this.state.result !== null && this.state.result.length > 0)            
-            return([
-                <View>
-                    <MenuButton navigation={this.props.navigation} />
-                    <Text style={styles.title}>Resultado</Text>                       
-                </View>,
-                <View style={styles.header}>                    
-                    <Text style={styles.product}>{this.state.result[0].producto.codigo} {this.state.result[0].producto.descripcion}</Text>
-                    <Image style={styles.image}
-                        source={this.state.image}
-                        onError={this.onError.bind(this)}
-                    />                    
-                </View>,
-                <FlatList 
-                    key="flatList"
-                    style={styles.list}
-                    data={this.state.result}
-                    renderItem={({item}) => this.handleRenderItem(item)}
-                    keyExtractor = {item => item.id}
-                />]
+            return(
+                <View style={styles.view}>
+                    <View style={styles.menuHeader}>
+                        <MenuButton navigation={this.props.navigation} />
+                        <Text style={styles.title}>Resultado</Text>                       
+                    </View>
+                    <View style={styles.header}>                    
+                        <Text style={styles.product}>{this.state.result[0].producto.codigo} {this.state.result[0].producto.descripcion}</Text>
+                        <Image style={styles.image}
+                            source={this.state.image}
+                            onError={this.onError.bind(this)}
+                        />                    
+                    </View>
+                    <View style={styles.listView}>
+                        <FlatList 
+                            key="flatList"
+                            style={styles.list}
+                            data={this.state.result}
+                            renderItem={({item}) => this.handleRenderItem(item)}
+                            keyExtractor = {item => item.id}
+                        />
+                    </View>
+                </View>
             );
         else
             return (
@@ -83,11 +87,13 @@ export default class SearchResult extends Component{
 
 
 const styles = StyleSheet.create({
-    list: {               
-        paddingTop: 10,
-        backgroundColor: '#F3F3F3'
+    view: {
+        flex: 1
     },
-    title: {
+    menuHeader: {
+        flex: 0.7,      
+    },
+    title: {        
         marginTop: 40,
         marginLeft: 60,
         marginBottom: 20,
@@ -99,15 +105,23 @@ const styles = StyleSheet.create({
         padding: 10
     },
     header:{
-        
+        flex: 1.2,
+        flexDirection: 'row'
     },
     product: {
+        width: '75%',
         padding: 10,
         fontSize: 20
     },
-    image: {        
-        height: 120,
-        width: 80,
-        margin: 10        
+    image: {                
+        width: '30%'        
+    },
+    listView: {
+        flex: 4.1
+    },
+    list: {                              
+        paddingTop: 10,
+        backgroundColor: '#F3F3F3'
     }
+    
 });

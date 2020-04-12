@@ -18,7 +18,7 @@ export async function getConfig()  {
         password = await AsyncStorage.getItem('password');
         if (password !== null) {
             // Our data is fetched successfully
-            console.log(password);
+            //console.log(password);
         }
     } catch (error) {
         // Error retrieving data
