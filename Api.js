@@ -1,6 +1,6 @@
 import base64 from 'react-native-base64';
 
-const url = 'http://qreative.eastus.cloudapp.azure.com/restdev/api';
+const url = 'http://qreative.eastus.cloudapp.azure.com/rest/api';
 
 export function getStockByProduct(company, password, product){      
   return fetch(url + '/stock/' + product,{
@@ -31,5 +31,4 @@ export function getBarCodeConfiguration(company, password){
         headers: new Headers({'Authorization': 'Basic ' + base64.encode(company + ":" + password)})
       })
       .then(response => response.json())      
-      .catch((error) => console.error(error));
   }

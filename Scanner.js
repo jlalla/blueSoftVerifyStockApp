@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { getConfig } from './Data';
-import { getStockByProduct } from './Api';
+import { getStockByProduct, getStockByProductWithVariants } from './Api';
 
 export default function Scanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -19,14 +19,38 @@ export default function Scanner({ navigation }) {
     setScanned(true);
     console.log(`Se leyó el código de barras ${data} de tipo ${type}!`);    
     getConfig().then(conf => {              
-          
-      getStockByProduct(
-        conf.company,
-        conf.password,
-        data
-      ).then(result => {          
-        navigation.jumpTo('result', result)
-      });
+            
+      //obtenemos el producto del código de barras leído
+      let product = data;
+      if(conf.variants){
+        if(conf.talleColorAnchoFijo){
+          product = data.substring(conf.talleColorProductoDesde, data.length - conf.talleColorProductoCantidadDeCaracteres + 1);
+        }else if(data.indexOf(conf.talleColorCaracter) > 0){
+          product = data.substr(0, data.indexOf(conf.talleColorCaracter)); 
+        }else if(data.indexOf(conf.talleColorSegundoCaracter) > 0){
+          product = data.substr(0, data.indexOf(conf.talleColorSegundoCaracter)); 
+        }else if(data.indexOf(conf.talleColorTercerCaracter) > 0){
+          product = data.substr(0, data.indexOf(conf.talleColorTercerCaracter)); 
+        }
+      }
+      
+      //buscamos el stock del producto
+      if(conf.variants){
+        getStockByProductWithVariants(
+          conf.company,
+          conf.password,
+          product,
+        ).then(result => {                     
+          navigation.jumpTo('result', result)});
+      }
+      else{
+        getStockByProduct(
+          conf.company,
+          conf.password,
+          product
+        ).then(result => {          
+          navigation.jumpTo('result', result)});
+      }
     });    
   };
 
