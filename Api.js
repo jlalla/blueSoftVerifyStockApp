@@ -26,7 +26,7 @@ export function getStockByProductWithVariants(company, password, product){
     .catch((error) => console.error(error));
 }
 
-export function getBarCodeConfiguration(company, password, product){      
+export function getBarCodeConfiguration(company, password){      
     return fetch(url + '/configuracion/codigoDeBarras',{
         headers: new Headers({'Authorization': 'Basic ' + base64.encode(company + ":" + password)})
       })
